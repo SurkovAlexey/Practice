@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .table {
+            width: 100%;
+            margin-bottom: 20px;
+            border: 1px solid #dddddd;
+            border-collapse: collapse;
+        }
+        .table th {
+            font-weight: bold;
+            padding: 5px;
+            background: #efefef;
+            border: 1px solid #dddddd;
+        }
+        .table td {
+            border: 1px solid #dddddd;
+            padding: 5px;
+        }
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .form-container {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 300px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        select,
+        input[type="submit"],
+        input[type="file"] {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        input[type="submit"] {
+            padding: 8px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .export-container a {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .export-container a:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <title>Книги</title>
+</head>
+<body>
+    <div class="navbar">
+        <a href="{{ url_for('users') }}">Пользователи</a>
+        <a href="{{ url_for('abonements') }}">Абонементы</a>
+        <a href="{{ url_for('visitors') }}">Посетители</a>
+        <a href="{{ url_for('books') }}">Книги</a>
+        <a href="{{ url_for('authors') }}">Авторы</a>
+        <a style="float: right;" href="{{ url_for('logout') }}">Выйти</a>
+    </div>
+    <div class="header-container">
+        <h1>Таблица книг</h1>
+        <div class="export-container">
+            <a href="{{ url_for('export_books_csv') }}">Экспортировать в CSV</a>
+        </div>
+    </div>
+    <div class="form-container">
+        <h2>Создать новую книгу</h2>
+        <form action="{{ url_for('create_book_route') }}" method="post">
+            <label for="name_book">Название книги:</label>
+            <input type="text" name="name_book" required>
+            <label for="authors_id">ID автора:</label>
+            <select id="authors_id" name="authors_id" required>
+                {% for author in authors %}
+                <option value="{{ author.authors_id }}">{{ author.authors_id }}</option>
+                {% endfor %}
+            </select>
+            <label for="edition">Издание:</label>
+            <input type="text" name="edition" required>
+            <input type="submit" value="Создать">
+        </form>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ключ</th>
+                <th>Название книги</th>
+                <th>ID автора</th>
+                <th>Издание</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row.books_id }}</td>
+                <td>{{ row.name_book }}</td>
+                <td>{{ row.authors_id }}</td>
+                <td>{{ row.edition }}</td>
+                <td>
+                    <form action="{{ url_for('edit_book_route') }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="books_id" value="{{ row.books_id }}">
+                        <input type="submit" value="Редактировать">
+                    </form>
+                    <form action="{{ url_for('delete_book_route') }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="books_id" value="{{ row.books_id }}">
+                        <input type="submit" value="Удалить">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

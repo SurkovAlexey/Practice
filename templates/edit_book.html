@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Book</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+        }
+        input[type="text"], select {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        input[type="submit"] {
+            padding: 8px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #4CA049;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Редактирование карточки книги</h1>
+        <form action="{{ url_for('change_book_route') }}" method="POST">
+            <input type="hidden" name="books_id" value="{{ book.books_id }}">
+            <label for="new_name_book">Новое название книги:</label>
+            <input type="text" id="new_name_book" name="new_name_book" value="{{ book.name_book }}" required>
+            <label for="new_authors_id">Новый ID автора:</label>
+            <select id="new_authors_id" name="new_authors_id" required>
+                {% for author in authors %}
+                <option value="{{ author.authors_id }}" {% if author.authors_id == book.authors_id %}selected{% endif %}>
+                    {{ author.authors_id }}
+                </option>
+                {% endfor %}
+            </select>
+            <label for="new_edition">Новое издание:</label>
+            <input type="text" id="new_edition" name="new_edition" value="{{ book.edition }}" required>
+            <input type="submit" value="Сохранить">
+        </form>
+        <form action="{{ url_for('books') }}" method="POST">
+            <input type="submit" value="Назад">
+        </form>
+    </div>
+</body>
+</html>

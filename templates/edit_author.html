@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать автора</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            border: 1px solid #ccc;
+            padding: 200px;
+            border-radius: 10px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+        }
+        input[type="text"] {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        input[type="submit"] {
+            padding: 8px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Редактирование карточки автора</h1>
+        <form action="{{ url_for('change_author_route') }}" method="POST">
+            <input type="hidden" name="authors_id" value="{{ author.authors_id }}">
+            <label for="new_fullname_author">Новое полное имя:</label>
+            <input type="text" id="new_fullname_author" name="new_fullname_author" value="{{ author.fullname_author }}" required>
+            <input type="submit" value="Сохранить">
+        </form>
+        <form action="{{ url_for('authors') }}" method="POST">
+            <input type="submit" value="Назад">
+        </form>
+    </div>
+</body>
+</html>
